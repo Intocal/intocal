@@ -20,7 +20,7 @@ Auth: `Authorization: Bearer sk_live_...` server-side; `X-IntoCal-Public-Key` +
 `X-IntoCal-Host` in browsers. Responses are `{ ok, data }` or `{ ok, error }`.
 
 - OpenAPI 3.1: https://intocal.com/api/openapi.json
-- Reference: https://intocal.com/docs/api
+- Reference: https://intocal.com/api-docs
 
 Key rules: `GET /v1/event-types` requires `host_id` when unauthenticated (else
 `400 HOST_REQUIRED`); event type display name is `name`, not `title`; times are

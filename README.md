@@ -7,7 +7,7 @@
 Beautiful booking pages, native Outlook and Google sync, a one-line embed, and a hosted
 MCP server for every user — so an AI agent can book a meeting without a browser.
 
-[Docs](https://intocal.com/docs) · [API reference](https://intocal.com/docs/api) · [MCP](https://intocal.com/mcp) · [llms.txt](https://intocal.com/llms.txt) · [OpenAPI](https://intocal.com/api/openapi.json)
+[API docs](https://intocal.com/api-docs) · [MCP](https://intocal.com/mcp) · [llms.txt](https://intocal.com/llms.txt) · [OpenAPI](https://intocal.com/api/openapi.json)
 
 [![npm @intocal/sdk](https://img.shields.io/npm/v/@intocal/sdk?label=%40intocal%2Fsdk&color=00dca9)](https://www.npmjs.com/package/@intocal/sdk)
 [![npm @intocal/react](https://img.shields.io/npm/v/@intocal/react?label=%40intocal%2Freact&color=00dca9)](https://www.npmjs.com/package/@intocal/react)
@@ -21,7 +21,7 @@ MCP server for every user — so an AI agent can book a meeting without a browse
 ## What IntoCal is
 
 IntoCal gives any website or agent a booking calendar. A host connects Google or
-Microsoft 365, defines event types, and publishes a page at `intocal.com/{username}`.
+Microsoft 365, defines event types, and publishes a page at `intocal.com/u/{username}`.
 Guests pick a slot and book — no account needed. Everything the booking page does is
 available over a REST API, a TypeScript SDK, React components, and MCP.
 
@@ -37,7 +37,7 @@ It is written for you, not for humans.
 | A booking widget inside React / Next.js | [`@intocal/react`](https://www.npmjs.com/package/@intocal/react) | 2 minutes |
 | Slots and bookings from your backend | [`@intocal/sdk`](https://www.npmjs.com/package/@intocal/sdk) | 2 minutes |
 | An AI agent that books meetings | [MCP](#ai-agents-mcp) | 1 minute, no install |
-| Anything else | [REST API](https://intocal.com/docs/api) | — |
+| Anything else | [REST API](https://intocal.com/api-docs) | — |
 
 ---
 
@@ -169,6 +169,8 @@ confirm immediately.
 | [`packages/proxy`](./packages/proxy) | The Deno service behind `api.intocal.com` |
 | [`examples/`](./examples) | Runnable integrations, one folder per framework |
 
+Also: [**Intocal/mcp**](https://github.com/Intocal/mcp) — standalone docs for the MCP server.
+
 ## Examples
 
 | Example | Stack |
@@ -191,7 +193,7 @@ Base URL `https://api.intocal.com/v1`. Auth via `Authorization: Bearer sk_live_.
 | `POST` | `/bookings/{id}/cancel` | Cancel |
 | `POST` | `/bookings/{id}/reschedule` | Move to a new slot |
 
-Full reference: [intocal.com/docs/api](https://intocal.com/docs/api) ·
+Full reference: [intocal.com/api-docs](https://intocal.com/api-docs) ·
 Machine-readable: [openapi.json](https://intocal.com/api/openapi.json)
 
 ## How IntoCal compares
