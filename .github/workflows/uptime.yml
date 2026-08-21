@@ -33,29 +33,34 @@ jobs:
 
       - name: Build report
         run: |
+          # Neutral body — each step below prepends its own opening line, so a
+          # recovery comment does not claim the service is still down.
           RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           {
-            echo "Booking confirmation and agent provisioning both route through this host,"
-            echo "so guest-facing flows are affected while it is down."
-            echo
             echo '```'
             cat result.txt
             echo '```'
             echo
             echo "Run: $RUN_URL"
-          } > report.md
+          } > probe.md
 
       - name: Open or update the incident issue
         if: steps.probe.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          {
+            echo "Booking confirmation and agent provisioning both route through this host,"
+            echo "so guest-facing flows are affected while it is down."
+            echo
+            cat probe.md
+          } > body.md
           existing=$(gh issue list --label uptime --state open --limit 1 --json number --jq '.[0].number // empty')
           if [ -n "$existing" ]; then
-            gh issue comment "$existing" --body-file report.md
+            gh issue comment "$existing" --body-file body.md
           else
             gh label create uptime --color B60205 --description "api.intocal.com availability" 2>/dev/null || true
-            gh issue create --label uptime --title "api.intocal.com health check failing" --body-file report.md
+            gh issue create --label uptime --title "api.intocal.com health check failing" --body-file body.md
           fi
 
       - name: Close the incident issue on recovery
@@ -63,8 +68,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          for n in $(gh issue list --label uptime --state open --json number --jq '.[].number'); do
-            gh issue comment "$n" --body-file report.md
+          open=$(gh issue list --label uptime --state open --json number --jq '.[].number')
+          [ -z "$open" ] && exit 0
+          { echo "Recovered — all checks passing."; echo; cat probe.md; } > body.md
+          for n in $open; do
+            gh issue comment "$n" --body-file body.md
             gh issue close "$n" --reason completed
           done
 
