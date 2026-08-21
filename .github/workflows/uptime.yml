@@ -1,0 +1,73 @@
+name: API uptime
+
+on:
+  schedule:
+    # Every 10 minutes. GitHub's scheduler is best-effort and can run late
+    # under load — treat this as a smoke check, not a pager.
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: uptime
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Probe api.intocal.com
+        id: probe
+        continue-on-error: true
+        run: |
+          # No pipe here: piping to tee would mask the script's exit code.
+          ./scripts/healthcheck.sh > result.txt 2>&1
+          status=$?
+          cat result.txt
+          exit $status
+
+      - name: Build report
+        run: |
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          {
+            echo "Booking confirmation and agent provisioning both route through this host,"
+            echo "so guest-facing flows are affected while it is down."
+            echo
+            echo '```'
+            cat result.txt
+            echo '```'
+            echo
+            echo "Run: $RUN_URL"
+          } > report.md
+
+      - name: Open or update the incident issue
+        if: steps.probe.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --label uptime --state open --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file report.md
+          else
+            gh label create uptime --color B60205 --description "api.intocal.com availability" 2>/dev/null || true
+            gh issue create --label uptime --title "api.intocal.com health check failing" --body-file report.md
+          fi
+
+      - name: Close the incident issue on recovery
+        if: steps.probe.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for n in $(gh issue list --label uptime --state open --json number --jq '.[].number'); do
+            gh issue comment "$n" --body-file report.md
+            gh issue close "$n" --reason completed
+          done
+
+      - name: Surface failure on the run itself
+        if: steps.probe.outcome == 'failure'
+        run: exit 1
