@@ -1,0 +1,76 @@
+name: Publish npm packages
+
+on:
+  push:
+    tags:
+      - "sdk-v*"
+      - "react-v*"
+      - "mcp-v*"
+      - "all-v*"
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Which package to publish"
+        required: true
+        default: "all"
+        type: choice
+        options: [sdk, react, mcp, all]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # enables npm provenance
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Determine target
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "pkg=${{ inputs.package }}" >> $GITHUB_OUTPUT
+          else
+            case "${GITHUB_REF_NAME}" in
+              sdk-v*)   echo "pkg=sdk"   >> $GITHUB_OUTPUT ;;
+              react-v*) echo "pkg=react" >> $GITHUB_OUTPUT ;;
+              mcp-v*)   echo "pkg=mcp"   >> $GITHUB_OUTPUT ;;
+              all-v*)   echo "pkg=all"   >> $GITHUB_OUTPUT ;;
+              *) echo "Unknown tag: $GITHUB_REF_NAME" && exit 1 ;;
+            esac
+          fi
+
+      - name: Publish @intocal/sdk
+        if: steps.target.outputs.pkg == 'sdk' || steps.target.outputs.pkg == 'all'
+        working-directory: packages/sdk
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          npm publish --access public --provenance
+
+      - name: Publish @intocal/react
+        if: steps.target.outputs.pkg == 'react' || steps.target.outputs.pkg == 'all'
+        working-directory: packages/react
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          npm publish --access public --provenance
+
+      - name: Publish @intocal/mcp
+        if: steps.target.outputs.pkg == 'mcp' || steps.target.outputs.pkg == 'all'
+        working-directory: packages/mcp
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          npm publish --access public --provenance

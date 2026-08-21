@@ -1,0 +1,26 @@
+{
+  "tasks": {
+    "dev": "deno run -A --watch main.ts",
+    "check": "deno check main.ts",
+    "deploy": "deno deploy --org intocal --app intocal-api --prod"
+  },
+  "deploy": {
+    "org": "intocal",
+    "app": "intocal-api"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

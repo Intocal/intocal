@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book a call</title>
+    <script src="https://intocal.com/embed.js" defer></script>
+  </head>
+  <body style="font-family: system-ui; max-width: 960px; margin: 40px auto; padding: 16px;">
+    <h1>Book a 30-minute intro</h1>
+
+    <!-- Inline embed: replace user/event with your IntoCal handle and event slug. -->
+    <div data-intocal="jane/intro-30" style="min-height: 720px"></div>
+
+    <!-- Optional styling hooks: data-theme="dark", data-color="#00dca9", data-hide-header -->
+
+    <h2>Or open it in a popup</h2>
+    <button id="book-btn">Open booking popup</button>
+
+    <script>
+      // Popups are wired programmatically. There is no data attribute for this —
+      // embed.js only reads data-intocal, data-theme, data-color and data-hide-header.
+      window.addEventListener("load", function () {
+        IntoCal.popup({ host: "jane", event: "intro-30", trigger: "#book-btn" });
+      });
+    </script>
+  </body>
+</html>

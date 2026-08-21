@@ -1,0 +1,47 @@
+{
+  "name": "@intocal/react",
+  "version": "0.3.1",
+  "description": "Drop-in React components for IntoCal — inline booking widget and popup trigger. Works with Next.js, Remix, Vite, CRA.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "keywords": [
+    "intocal", "react", "calendar", "scheduling", "booking",
+    "appointment", "calendly-alternative", "next.js", "remix"
+  ],
+  "homepage": "https://intocal.com",
+  "repository": { "type": "git", "url": "https://github.com/intocal/react" },
+  "publishConfig": { "access": "public" },
+  "peerDependencies": {
+    "react": ">=17",
+    "react-dom": ">=17"
+  },
+  "devDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "@types/react": "^18.0.0",
+    "typescript": "^5.5.0",
+    "tsup": "^8.0.0"
+  },
+  "scripts": {
+    "build": "tsup src/index.tsx --format esm,cjs --dts --clean",
+    "prepublishOnly": "npm run build"
+  }
+}

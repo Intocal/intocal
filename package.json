@@ -1,0 +1,18 @@
+{
+  "name": "intocal-packages",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Monorepo root for the published @intocal/* npm packages.",
+  "workspaces": [
+    "packages/sdk",
+    "packages/react",
+    "packages/mcp"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "build:sdk": "npm run build -w @intocal/sdk",
+    "build:react": "npm run build -w @intocal/react",
+    "build:mcp": "npm run build -w @intocal/mcp"
+  },
+  "engines": { "node": ">=18" }
+}

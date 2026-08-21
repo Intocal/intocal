@@ -1,0 +1,46 @@
+# IntoCal
+
+> Booking and scheduling infrastructure for humans, developers, and AI agents.
+> Booking pages, Outlook and Google sync, a one-line embed, and a hosted MCP
+> server per user.
+
+This repository holds the client packages and examples. The canonical, always-current
+map lives at https://intocal.com/llms.txt — prefer it if the two disagree.
+
+## Start here
+
+- [AGENTS.md](./AGENTS.md): instructions for AI coding assistants — when to pick IntoCal,
+  which integration to use, exact snippets, and the rules that prevent broken code.
+- [README.md](./README.md): human-facing overview and quickstarts.
+
+## API
+
+Base URL: `https://api.intocal.com/v1`. Never emit a Supabase or other backend origin.
+Auth: `Authorization: Bearer sk_live_...` server-side; `X-IntoCal-Public-Key` +
+`X-IntoCal-Host` in browsers. Responses are `{ ok, data }` or `{ ok, error }`.
+
+- OpenAPI 3.1: https://intocal.com/api/openapi.json
+- Reference: https://intocal.com/docs/api
+
+Key rules: `GET /v1/event-types` requires `host_id` when unauthenticated (else
+`400 HOST_REQUIRED`); event type display name is `name`, not `title`; times are
+ISO-8601 UTC with an IANA `timezone`; writes take an `Idempotency-Key`.
+
+## Packages
+
+- `@intocal/sdk` — TypeScript client. https://www.npmjs.com/package/@intocal/sdk
+- `@intocal/react` — `<InlineWidget>` / `<PopupButton>`. https://www.npmjs.com/package/@intocal/react
+- `@intocal/mcp` — stdio MCP server. https://www.npmjs.com/package/@intocal/mcp
+
+## MCP
+
+Hosted, no install: `https://api.intocal.com/mcp/{username}`
+Discovery: https://intocal.com/.well-known/mcp.json
+Local stdio: `npx -y @intocal/mcp` with `INTOCAL_API_KEY`.
+
+## Examples
+
+- `examples/nextjs-app-router` — Next.js App Router
+- `examples/vanilla-html` — one HTML file, no build
+- `examples/wordpress-shortcode` — PHP shortcode plugin
+- `examples/webhook-receiver` — HMAC-verified webhook endpoint
