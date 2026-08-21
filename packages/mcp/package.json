@@ -1,6 +1,6 @@
 {
   "name": "@intocal/mcp",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Model Context Protocol server for IntoCal — booking, scheduling, and calendar tools for AI agents (Claude, Cursor, ChatGPT, Windsurf).",
   "license": "MIT",
   "type": "module",
@@ -30,8 +30,10 @@
   "homepage": "https://intocal.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/intocal/mcp"
+    "url": "git+https://github.com/Intocal/intocal.git",
+    "directory": "packages/mcp"
   },
+  "bugs": { "url": "https://github.com/Intocal/intocal/issues" },
   "publishConfig": {
     "access": "public"
   },
@@ -40,7 +42,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@intocal/sdk": "^0.3.1",
+    "@intocal/sdk": "^0.3.2",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "zod": "^3.25.76"
   },

@@ -10,6 +10,7 @@
  *   GET  /health          -> handled here
  *   ANY  /v1/<path>       -> ${BACKEND_ORIGIN}/functions/v1/api-v1/v1/<path>
  *   ANY  /mcp/<user>      -> ${BACKEND_ORIGIN}/functions/v1/mcp-user/<user>
+ *   ANY  /connector/<path> -> ${BACKEND_ORIGIN}/functions/v1/connector-provision/<path>
  *
  * Env (Deno Deploy -> Settings -> Environment Variables):
  *   BACKEND_ORIGIN      required, e.g. https://<project-ref>.supabase.co
@@ -69,6 +70,10 @@ function upstreamFor(url: URL, origin: string): URL | null {
     const user = path.slice("/mcp/".length);
     return new URL(`/functions/v1/mcp-user/${user}${url.search}`, origin);
   }
+  if (path.startsWith("/connector/")) {
+    const rest = path.slice("/connector/".length);
+    return new URL(`/functions/v1/connector-provision/${rest}${url.search}`, origin);
+  }
   return null;
 }
 
@@ -113,7 +118,9 @@ Deno.serve(async (req: Request) => {
         ok: false,
         error: {
           code: "NOT_FOUND",
-          message: `Unknown path ${url.pathname}. The IntoCal REST API lives under /v1.`,
+          message:
+            `Unknown path ${url.pathname}. The IntoCal REST API lives under /v1, ` +
+            `MCP under /mcp/<username>, and agent provisioning under /connector.`,
           suggested_action: "See https://intocal.com/docs",
         },
       },
