@@ -11,6 +11,7 @@
  *   ANY  /v1/<path>       -> ${BACKEND_ORIGIN}/functions/v1/api-v1/v1/<path>
  *   ANY  /mcp/<user>      -> ${BACKEND_ORIGIN}/functions/v1/mcp-user/<user>
  *   ANY  /connector/<path> -> ${BACKEND_ORIGIN}/functions/v1/connector-provision/<path>
+ *   ANY  /booking-confirm    -> ${BACKEND_ORIGIN}/functions/v1/booking-confirm
  *
  * Env (Deno Deploy -> Settings -> Environment Variables):
  *   BACKEND_ORIGIN      required, e.g. https://<project-ref>.supabase.co
@@ -73,6 +74,10 @@ function upstreamFor(url: URL, origin: string): URL | null {
   if (path.startsWith("/connector/")) {
     const rest = path.slice("/connector/".length);
     return new URL(`/functions/v1/connector-provision/${rest}${url.search}`, origin);
+  }
+  if (path === "/booking-confirm" || path.startsWith("/booking-confirm/")) {
+    const rest = path.slice("/booking-confirm".length);
+    return new URL(`/functions/v1/booking-confirm${rest}${url.search}`, origin);
   }
   return null;
 }

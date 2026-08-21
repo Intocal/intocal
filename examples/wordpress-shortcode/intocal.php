@@ -43,10 +43,12 @@ add_shortcode('intocal', function ($atts) {
         // iframe inside the <button> instead of opening a modal.
         $id    = 'intocal-' . wp_generate_uuid4();
         $label = esc_html($a['label']);
+        // JSON-encode the raw values, not the HTML-escaped ones: esc_attr() is for
+        // attribute context, and double-escaping would corrupt a host containing &.
         $js    = sprintf(
             'window.addEventListener("load",function(){IntoCal.popup({host:%s,event:%s,trigger:"#%s"});});',
-            wp_json_encode($user),
-            wp_json_encode($event),
+            wp_json_encode($a['user']),
+            wp_json_encode($a['event']),
             esc_js($id)
         );
         return sprintf(
