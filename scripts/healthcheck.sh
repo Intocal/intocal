@@ -41,7 +41,7 @@ probe "unknown path 404"   404 "$BASE/__no_such_route__"
 
 # /health must also report itself configured — a deploy without BACKEND_ORIGIN
 # still answers 200 on the route but is useless for traffic.
-body=$(curl -s -m "$TIMEOUT" "$BASE/health" 2>/dev/null | head -c 200 | tr -d '
+body=$(curl -s -m "$TIMEOUT" "$BASE/health" 2>/dev/null | head -c 200 | tr -d '
 ')
 if printf '%s' "$body" | grep -q '"configured":true'; then
   echo "  ok   configured flag       true"

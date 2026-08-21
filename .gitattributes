@@ -1,0 +1,8 @@
+# Normalise line endings in the repository regardless of the author's OS.
+* text=auto
+
+# These must be LF even in a Windows working tree. A CRLF shebang makes Linux
+# look for an interpreter literally named "bash\r" and fails with exit 127.
+*.sh   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
