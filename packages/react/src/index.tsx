@@ -40,7 +40,9 @@ export interface BaseProps extends IntoCalEvents {
 function buildSrc(p: BaseProps): string {
   const base = p.baseUrl || DEFAULT_BASE_URL;
   const qs = new URLSearchParams({ embed: "1", ...(p.prefill || {}) });
-  return `${base}/${encodeURIComponent(p.user)}/${encodeURIComponent(p.eventType)}?${qs}`;
+  // Booking pages live under /book/<user>/<slug>. A bare /<user>/<slug> matches no
+  // route and renders the site's 404 page inside the iframe.
+  return `${base}/book/${encodeURIComponent(p.user)}/${encodeURIComponent(p.eventType)}?${qs}`;
 }
 
 function useIntoCalMessages(

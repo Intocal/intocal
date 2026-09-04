@@ -1,6 +1,6 @@
 {
   "name": "@intocal/react",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Drop-in React components for IntoCal — inline booking widget and popup trigger. Works with Next.js, Remix, Vite, CRA.",
   "license": "MIT",
   "type": "module",
