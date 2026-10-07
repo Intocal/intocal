@@ -9,7 +9,7 @@ Three packages ship to npm; one Deno service must be live first.
 | `@intocal/mcp`   | `packages/mcp`   | `@intocal/mcp`   |
 | —                | `packages/proxy` | not published (Deno Deploy) |
 
-All three are at **0.3.1**, and all three names are unclaimed on npm.
+Packages are SDK **0.3.4**, React **0.3.3**, MCP **0.3.3** react and all three names are unclaimed on npm.
 
 ## Order matters
 
